@@ -1,0 +1,250 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CloneBrothers Validation Pipeline",
+  "description": "Orchestration configuration for the complete validation sprint workflow",
+
+  "pipeline": {
+    "name": "clonebrothers_validation",
+    "version": "1.0.0",
+    "description": "48-72 hour product validation sprint",
+
+    "stages": [
+      {
+        "stage_id": "discovery",
+        "name": "Product Discovery",
+        "duration_estimate": "2-4 hours",
+        "agents": [
+          {
+            "agent": "product-research",
+            "model": "sonnet",
+            "inputs": ["niche", "market", "budget"],
+            "outputs": ["product_recommendations", "validation_scores"],
+            "success_criteria": {
+              "min_products_analyzed": 20,
+              "min_go_recommendations": 3
+            }
+          }
+        ],
+        "parallel": false,
+        "human_checkpoint": true,
+        "checkpoint_decision": "Select product(s) to validate"
+      },
+
+      {
+        "stage_id": "intelligence",
+        "name": "Competitive Intelligence",
+        "duration_estimate": "2-3 hours",
+        "agents": [
+          {
+            "agent": "competitor-teardown",
+            "model": "sonnet",
+            "inputs": ["selected_product", "competitor_urls"],
+            "outputs": ["funnel_blueprint", "templates"],
+            "parallel_with": ["ai-visibility-monitor"]
+          },
+          {
+            "agent": "ai-visibility-monitor",
+            "model": "sonnet",
+            "inputs": ["product_category", "competitor_brands"],
+            "outputs": ["visibility_report", "llmo_opportunities"],
+            "parallel_with": ["competitor-teardown"]
+          }
+        ],
+        "parallel": true,
+        "human_checkpoint": false
+      },
+
+      {
+        "stage_id": "content_creation",
+        "name": "Content Generation",
+        "duration_estimate": "3-4 hours",
+        "agents": [
+          {
+            "agent": "content-factory",
+            "model": "sonnet",
+            "inputs": ["product_brief", "competitor_templates", "market"],
+            "outputs": [
+              "product_descriptions",
+              "landing_page_copy",
+              "meta_ads",
+              "email_sequences"
+            ]
+          },
+          {
+            "agent": "creative-brief-generator",
+            "model": "sonnet",
+            "inputs": ["product_brief", "winning_hooks"],
+            "outputs": ["ugc_briefs", "video_scripts", "static_briefs"],
+            "parallel_with": ["content-factory"]
+          }
+        ],
+        "parallel": true,
+        "human_checkpoint": false
+      },
+
+      {
+        "stage_id": "compliance_review",
+        "name": "Compliance Check",
+        "duration_estimate": "30-60 minutes",
+        "agents": [
+          {
+            "agent": "compliance-checker",
+            "model": "opus",
+            "inputs": ["all_content_assets", "product_category", "market"],
+            "outputs": ["compliance_report", "revised_claims"],
+            "critical": true
+          }
+        ],
+        "parallel": false,
+        "human_checkpoint": true,
+        "checkpoint_decision": "Approve compliant content or request revisions"
+      },
+
+      {
+        "stage_id": "store_build",
+        "name": "Store Deployment",
+        "duration_estimate": "2-3 hours",
+        "agents": [
+          {
+            "agent": "shopify-store-builder",
+            "model": "sonnet",
+            "inputs": ["approved_content", "branding", "integrations"],
+            "outputs": ["live_store_url", "launch_checklist"]
+          }
+        ],
+        "parallel": false,
+        "human_checkpoint": true,
+        "checkpoint_decision": "Final review before launch"
+      },
+
+      {
+        "stage_id": "cro_audit",
+        "name": "Conversion Optimization",
+        "duration_estimate": "1-2 hours",
+        "agents": [
+          {
+            "agent": "cro-audit",
+            "model": "sonnet",
+            "inputs": ["live_store_url"],
+            "outputs": ["audit_report", "optimization_recommendations"]
+          }
+        ],
+        "parallel": false,
+        "human_checkpoint": false,
+        "post_launch": true
+      }
+    ],
+
+    "total_estimated_duration": "12-18 hours of agent work",
+    "wall_clock_time": "48-72 hours (including human review)",
+
+    "success_metrics": {
+      "time_to_launch": "< 72 hours",
+      "content_compliance_rate": "> 90%",
+      "store_readiness_score": "> 85/100",
+      "first_sale_target": "< 7 days post-launch"
+    },
+
+    "abort_criteria": {
+      "compliance_critical_failures": true,
+      "margin_below_threshold": true,
+      "human_veto": true
+    }
+  },
+
+  "agent_roster": {
+    "high_priority": [
+      {
+        "agent_id": "product-research",
+        "name": "Product Research Agent",
+        "bottleneck_solved": "4-6 hours of manual product research",
+        "model": "sonnet",
+        "category": "discovery"
+      },
+      {
+        "agent_id": "content-factory",
+        "name": "Content Factory Agent",
+        "bottleneck_solved": "10-12 hours of content creation",
+        "model": "sonnet",
+        "category": "content"
+      },
+      {
+        "agent_id": "competitor-teardown",
+        "name": "Competitor Teardown Agent",
+        "bottleneck_solved": "3-5 hours of funnel analysis",
+        "model": "sonnet",
+        "category": "intelligence"
+      }
+    ],
+    "secondary": [
+      {
+        "agent_id": "creative-brief-generator",
+        "name": "Creative Brief Generator",
+        "bottleneck_solved": "3-4 hours per launch",
+        "model": "sonnet",
+        "category": "content"
+      },
+      {
+        "agent_id": "cro-audit",
+        "name": "CRO Audit Agent",
+        "bottleneck_solved": "2-3 hours per brand",
+        "model": "sonnet",
+        "category": "optimization"
+      },
+      {
+        "agent_id": "compliance-checker",
+        "name": "Compliance Checker Agent",
+        "bottleneck_solved": "1-2 hours per product",
+        "model": "opus",
+        "category": "compliance",
+        "critical": true
+      }
+    ],
+    "integrations": [
+      {
+        "agent_id": "ai-visibility-monitor",
+        "name": "AI Visibility Monitor",
+        "source": "brandmind",
+        "model": "sonnet",
+        "category": "llmo"
+      },
+      {
+        "agent_id": "chrome-extension",
+        "name": "Competitor Scraper Extension",
+        "type": "browser_tool",
+        "category": "intelligence"
+      },
+      {
+        "agent_id": "shopify-store-builder",
+        "name": "Shopify Store Builder",
+        "model": "sonnet",
+        "category": "deployment"
+      }
+    ]
+  },
+
+  "time_savings_summary": {
+    "traditional_process": {
+      "product_research": "4-6 hours",
+      "competitor_analysis": "3-5 hours",
+      "content_creation": "10-12 hours",
+      "creative_briefs": "3-4 hours",
+      "compliance_review": "1-2 hours",
+      "store_setup": "4-6 hours",
+      "cro_audit": "2-3 hours",
+      "total": "27-38 hours of work over 2-3 weeks"
+    },
+    "orchestrated_process": {
+      "product_research": "30-45 minutes",
+      "competitor_analysis": "30-45 minutes",
+      "content_creation": "1-2 hours",
+      "creative_briefs": "20-30 minutes",
+      "compliance_review": "10-15 minutes",
+      "store_setup": "1-2 hours",
+      "cro_audit": "15-20 minutes",
+      "total": "4-7 hours of agent work + human review",
+      "wall_clock": "48-72 hours including parallel execution"
+    },
+    "improvement": "5-8x faster time-to-launch"
+  }
+}
