@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrandMind LLMO Intelligence | See How AI Sees Your Brand</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #16161f;
+            --border-color: #2a2a3a;
+            --border-glow: #6366f1;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #6366f1;
+            --accent-tertiary: #a78bfa;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-glow-1 { top: -200px; left: -200px; }
+        .bg-glow-2 { bottom: -200px; right: -200px; }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent-tertiary);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-primary);
+            opacity: 0.5;
+        }
+
+        /* Form */
+        .form-section {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .progress-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-header p {
+            color: var(--text-secondary);
+        }
+
+        .ai-animation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .pulse-ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .pulse-ring::before,
+        .pulse-ring::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            animation: pulse 2s ease-out infinite;
+        }
+
+        .pulse-ring::after {
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        .pulse-core {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .scan-steps {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .scan-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            opacity: 0.4;
+        }
+
+        .scan-step.active {
+            opacity: 1;
+            background: var(--bg-tertiary);
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .scan-step.complete {
+            opacity: 1;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .scan-step.active .step-icon {
+            background: var(--gradient-primary);
+        }
+
+        .scan-step.complete .step-icon {
+            background: var(--success);
+        }
+
+        .step-text {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .step-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent-primary) calc(var(--score) * 1%),
+                var(--bg-tertiary) calc(var(--score) * 1%)
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--bg-card);
+            border-radius: 50%;
+        }
+
+        .score-value {
+            position: relative;
+            z-index: 1;
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .score-label {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .score-status.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .score-status.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .score-status.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .platform-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .platform-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .platform-icon.chatgpt { background: #10a37f; }
+        .platform-icon.perplexity { background: #1fb8cd; }
+        .platform-icon.claude { background: #cc785c; }
+        .platform-icon.gemini { background: #4285f4; }
+
+        .platform-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .platform-status.visible {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        .platform-status.invisible {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .platform-detail {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .cta-box {
+            background: var(--gradient-glow);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .cta-box h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-box p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-box .btn {
+            display: inline-flex;
+        }
+
+        /* Lead Capture Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 480px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal .form-section {
+            max-width: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: var(--accent-tertiary);
+            text-decoration: none;
+        }
+
+        /* Utilities */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <span class="logo-text">BrandMind</span>
+            </div>
+            <div class="badge">LLMO Intelligence Beta</div>
+        </header>
+
+        <section class="hero">
+            <h1>See How <span>AI Sees</span> Your Brand</h1>
+            <p>Discover your visibility across ChatGPT, Perplexity, Claude, and Gemini. 200M+ users ask AI for recommendations daily. Are they finding you?</p>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value">200M+</div>
+                    <div class="stat-label">Weekly AI Users</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">-34%</div>
+                    <div class="stat-label">SEO CTR Decline</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12-18mo</div>
+                    <div class="stat-label">First Mover Window</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="main-card">
+            <!-- Form Section -->
+            <div class="form-section" id="formSection">
+                <h2 class="form-title">Start Your Free AI Visibility Scan</h2>
+                <form id="scanForm">
+                    <div class="input-group">
+                        <label for="brandName">Brand Name</label>
+                        <input type="text" id="brandName" placeholder="e.g., Harmoni Balanse, Nordic Naturals" required>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="category">Category</label>
+                            <select id="category" required>
+                                <option value="">Select category...</option>
+                                <option value="supplements">Supplements & Vitamins</option>
+                                <option value="skincare">Skincare & Beauty</option>
+                                <option value="wellness">Wellness & Health</option>
+                                <option value="fitness">Fitness & Sports</option>
+                                <option value="food">Food & Beverage</option>
+                                <option value="tech">Technology</option>
+                                <option value="saas">SaaS / Software</option>
+                                <option value="ecommerce">E-commerce / DTC</option>
+                                <option value="finance">Finance / Fintech</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="market">Primary Market</label>
+                            <select id="market" required>
+                                <option value="">Select market...</option>
+                                <option value="global">Global</option>
+                                <option value="us">United States</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="eu">European Union</option>
+                                <option value="nordics">Nordics (SE/NO/DK/FI)</option>
+                                <option value="dach">DACH (DE/AT/CH)</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="competitor">Main Competitor (Optional)</label>
+                        <input type="text" id="competitor" placeholder="e.g., Athletic Greens, The Ordinary">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        Scan AI Visibility
+                    </button>
+                </form>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section" id="progressSection">
+                <div class="progress-header">
+                    <h2>Analyzing <span id="scanningBrand">Your Brand</span></h2>
+                    <p>Our AI agents are scanning multiple platforms...</p>
+                </div>
+                <div class="ai-animation">
+                    <div class="pulse-ring">
+                        <div class="pulse-core">AI</div>
+                    </div>
+                </div>
+                <div class="scan-steps">
+                    <div class="scan-step" data-step="1">
+                        <div class="step-icon">1</div>
+                        <div class="step-text">
+                            <div class="step-title">Querying ChatGPT</div>
+                            <div class="step-subtitle">Testing 5 discovery prompts</div>
+                        </div>
+                        <div class="spinner hidden"></div>
+                    </div>
+                    <div class="scan-step" data-step="2">
+                        <div class="step-icon">2</div>
+                        <div class="step-text">
+                            <div class="step-title">Scanning Perplexity</div>
+                            <div class="step-subtitle">Analyzing citation sources</div>
+                        </div>
+                        <div class="spinner hidden"></div>
+                    </div>
+                    <div class="scan-step" data-step="3">
+                        <div class="step-icon">3</div>
+                        <div class="step-text">
+                            <div class="step-title">Checking Claude</div>
+                            <div class="step-subtitle">Evaluating brand recognition</div>
+                        </div>
+                        <div class="spinner hidden"></div>
+                    </div>
+                    <div class="scan-step" data-step="4">
+                        <div class="step-icon">4</div>
+                        <div class="step-text">
+                            <div class="step-title">Testing Gemini</div>
+                            <div class="step-subtitle">Checking Google AI visibility</div>
+                        </div>
+                        <div class="spinner hidden"></div>
+                    </div>
+                    <div class="scan-step" data-step="5">
+                        <div class="step-icon">5</div>
+                        <div class="step-text">
+                            <div class="step-title">Generating Report</div>
+                            <div class="step-subtitle">Compiling competitive analysis</div>
+                        </div>
+                        <div class="spinner hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <div class="score-circle" style="--score: 38">
+                        <div class="score-value" id="scoreValue">38</div>
+                    </div>
+                    <div class="score-label">AI Visibility Score</div>
+                    <div class="score-status warning" id="scoreStatus">Needs Improvement</div>
+                </div>
+
+                <div class="platform-grid">
+                    <div class="platform-card">
+                        <div class="platform-header">
+                            <div class="platform-name">
+                                <div class="platform-icon chatgpt">G</div>
+                                ChatGPT
+                            </div>
+                            <span class="platform-status invisible" id="chatgptStatus">Not Found</span>
+                        </div>
+                        <div class="platform-detail" id="chatgptDetail">Your brand was not mentioned in 5/5 test prompts. Competitors are dominating this space.</div>
+                    </div>
+
+                    <div class="platform-card">
+                        <div class="platform-header">
+                            <div class="platform-name">
+                                <div class="platform-icon perplexity">P</div>
+                                Perplexity
+                            </div>
+                            <span class="platform-status visible" id="perplexityStatus">Partial</span>
+                        </div>
+                        <div class="platform-detail" id="perplexityDetail">Found in 2/5 queries, typically in position 4-5. Citation source: Reddit thread from 2023.</div>
+                    </div>
+
+                    <div class="platform-card">
+                        <div class="platform-header">
+                            <div class="platform-name">
+                                <div class="platform-icon claude">C</div>
+                                Claude
+                            </div>
+                            <span class="platform-status invisible" id="claudeStatus">Not Found</span>
+                        </div>
+                        <div class="platform-detail" id="claudeDetail">No brand mentions detected. Consider improving structured data and authoritative citations.</div>
+                    </div>
+
+                    <div class="platform-card">
+                        <div class="platform-header">
+                            <div class="platform-name">
+                                <div class="platform-icon gemini">G</div>
+                                Gemini
+                            </div>
+                            <span class="platform-status invisible" id="geminiStatus">Not Found</span>
+                        </div>
+                        <div class="platform-detail" id="geminiDetail">Zero visibility in Google's AI. This affects AI Overviews in search results.</div>
+                    </div>
+                </div>
+
+                <div class="cta-box">
+                    <h3>Want the Full Analysis?</h3>
+                    <p>Get detailed recommendations, competitor comparison, and actionable next steps delivered to your inbox within 24 hours.</p>
+                    <button class="btn btn-primary" id="getFullReport">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                        Get Full Report Free
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Powered by <a href="#">Digital Dali</a> | BrandMind LLMO Intelligence</p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem;">This is a Wizard of Oz prototype. Full automation coming soon.</p>
+        </footer>
+    </div>
+
+    <!-- Lead Capture Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2>Get Your Full Report</h2>
+            <p>Enter your details and we'll send a comprehensive AI visibility analysis within 24 hours.</p>
+            <div class="form-section">
+                <form id="leadForm">
+                    <div class="input-group">
+                        <label for="leadName">Your Name</label>
+                        <input type="text" id="leadName" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="leadEmail">Work Email</label>
+                        <input type="email" id="leadEmail" placeholder="john@company.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="leadCompany">Company</label>
+                        <input type="text" id="leadCompany" placeholder="Company Name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="leadRole">Your Role</label>
+                        <select id="leadRole">
+                            <option value="">Select your role...</option>
+                            <option value="marketing">Marketing / CMO</option>
+                            <option value="founder">Founder / CEO</option>
+                            <option value="product">Product</option>
+                            <option value="growth">Growth</option>
+                            <option value="seo">SEO / Content</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Send My Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="successToast" style="
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--success);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        display: none;
+        animation: slideIn 0.3s ease;
+        z-index: 1001;
+    ">
+        Report request submitted. Check your inbox within 24 hours.
+    </div>
+
+    <script>
+        // ==========================================
+        // BrandMind LLMO Tester - Wizard of Oz Mode
+        // ==========================================
+
+        const state = {
+            brandName: '',
+            category: '',
+            market: '',
+            competitor: '',
+            score: 0,
+            platforms: {}
+        };
+
+        // DOM Elements
+        const formSection = document.getElementById('formSection');
+        const progressSection = document.getElementById('progressSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const scanForm = document.getElementById('scanForm');
+        const leadForm = document.getElementById('leadForm');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const getFullReportBtn = document.getElementById('getFullReport');
+        const successToast = document.getElementById('successToast');
+
+        // Form Submit - Start Scan
+        scanForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            state.brandName = document.getElementById('brandName').value;
+            state.category = document.getElementById('category').value;
+            state.market = document.getElementById('market').value;
+            state.competitor = document.getElementById('competitor').value;
+
+            document.getElementById('scanningBrand').textContent = state.brandName;
+
+            // Switch to progress view
+            formSection.style.display = 'none';
+            progressSection.classList.add('active');
+
+            // Run simulated scan
+            await runSimulatedScan();
+        });
+
+        // Simulated Scan Animation
+        async function runSimulatedScan() {
+            const steps = document.querySelectorAll('.scan-step');
+
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                const spinner = step.querySelector('.spinner');
+
+                // Activate step
+                step.classList.add('active');
+                spinner.classList.remove('hidden');
+
+                // Random delay (1.5-3s) to simulate real scanning
+                await delay(1500 + Math.random() * 1500);
+
+                // Complete step
+                step.classList.remove('active');
+                step.classList.add('complete');
+                spinner.classList.add('hidden');
+                step.querySelector('.step-icon').textContent = '✓';
+            }
+
+            // Generate results
+            await delay(500);
+            generateResults();
+
+            // Switch to results view
+            progressSection.classList.remove('active');
+            resultsSection.classList.add('active');
+        }
+
+        // Generate Simulated Results
+        function generateResults() {
+            // Generate semi-random score based on brand characteristics
+            const baseScore = 25 + Math.floor(Math.random() * 30);
+            state.score = baseScore;
+
+            // Update score display
+            const scoreCircle = document.querySelector('.score-circle');
+            const scoreValue = document.getElementById('scoreValue');
+            const scoreStatus = document.getElementById('scoreStatus');
+
+            scoreCircle.style.setProperty('--score', state.score);
+            scoreValue.textContent = state.score;
+
+            if (state.score < 30) {
+                scoreStatus.textContent = 'Critical Gap';
+                scoreStatus.className = 'score-status danger';
+            } else if (state.score < 60) {
+                scoreStatus.textContent = 'Needs Improvement';
+                scoreStatus.className = 'score-status warning';
+            } else {
+                scoreStatus.textContent = 'Competitive';
+                scoreStatus.className = 'score-status success';
+            }
+
+            // Platform-specific results (simulated)
+            updatePlatformResults();
+        }
+
+        function updatePlatformResults() {
+            // Randomize platform visibility for demo
+            const platforms = ['chatgpt', 'perplexity', 'claude', 'gemini'];
+            const details = {
+                chatgpt: [
+                    `${state.brandName} was not mentioned in 5/5 test prompts. Competitors like ${state.competitor || 'others'} are dominating.`,
+                    `Found in 1/5 queries as a secondary mention. Improvement opportunity identified.`,
+                    `Mentioned in 3/5 prompts with generally positive context.`
+                ],
+                perplexity: [
+                    `Found in 2/5 queries, typically in position 4-5. Citation source: Reddit thread from 2023.`,
+                    `Not appearing in category-related searches. Missing Reddit presence detected.`,
+                    `Good visibility via YouTube reviews being cited.`
+                ],
+                claude: [
+                    `No brand mentions detected. Consider improving structured data and authoritative citations.`,
+                    `Partial recognition. Brand confused with similar name.`,
+                    `Strong presence. Mentioned as category leader.`
+                ],
+                gemini: [
+                    `Zero visibility in Google's AI. This affects AI Overviews in search results.`,
+                    `Limited visibility. Google Knowledge Graph entry incomplete.`,
+                    `Appearing in AI Overviews for category queries.`
+                ]
+            };
+
+            platforms.forEach(platform => {
+                const isVisible = Math.random() > 0.6;
+                const statusEl = document.getElementById(`${platform}Status`);
+                const detailEl = document.getElementById(`${platform}Detail`);
+
+                if (isVisible) {
+                    statusEl.textContent = 'Visible';
+                    statusEl.className = 'platform-status visible';
+                    detailEl.textContent = details[platform][2];
+                } else if (Math.random() > 0.5) {
+                    statusEl.textContent = 'Partial';
+                    statusEl.className = 'platform-status visible';
+                    detailEl.textContent = details[platform][1];
+                } else {
+                    statusEl.textContent = 'Not Found';
+                    statusEl.className = 'platform-status invisible';
+                    detailEl.textContent = details[platform][0];
+                }
+            });
+        }
+
+        // Lead Capture Modal
+        getFullReportBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('active');
+        });
+
+        modalClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        // Lead Form Submit
+        leadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const leadData = {
+                name: document.getElementById('leadName').value,
+                email: document.getElementById('leadEmail').value,
+                company: document.getElementById('leadCompany').value,
+                role: document.getElementById('leadRole').value,
+                brand: state.brandName,
+                category: state.category,
+                market: state.market,
+                competitor: state.competitor,
+                score: state.score,
+                timestamp: new Date().toISOString()
+            };
+
+            // In Wizard of Oz mode: Log to console, store locally
+            // In production: Send to Supabase/Firebase
+            console.log('Lead captured:', leadData);
+
+            // Store in localStorage for demo
+            const leads = JSON.parse(localStorage.getItem('brandmind_leads') || '[]');
+            leads.push(leadData);
+            localStorage.setItem('brandmind_leads', JSON.stringify(leads));
+
+            // Close modal and show success
+            modalOverlay.classList.remove('active');
+            showToast();
+
+            // TODO: In production, trigger webhook/email notification here
+        });
+
+        // Utility Functions
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showToast() {
+            successToast.style.display = 'block';
+            setTimeout(() => {
+                successToast.style.display = 'none';
+            }, 5000);
+        }
+
+        // Debug: View captured leads
+        window.viewLeads = () => {
+            const leads = JSON.parse(localStorage.getItem('brandmind_leads') || '[]');
+            console.table(leads);
+            return leads;
+        };
+
+        console.log('%c BrandMind LLMO Tester ', 'background: #8b5cf6; color: white; font-size: 14px; padding: 4px 8px; border-radius: 4px;');
+        console.log('Wizard of Oz mode active. Run viewLeads() to see captured leads.');
+    </script>
+</body>
+</html>
