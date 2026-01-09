@@ -1,8 +1,10 @@
-# Claude Code Orchestration
+# Kleiber Orchestration System
 
-> Turn one developer into an orchestration layer for 5-50+ parallel Claude Code agents.
+> Named after conductor Erich Kleiber—one orchestrator, many virtuosos, flawless coordination.
 
-**Ship production systems in days, not months.**
+**Turn one developer into an orchestration layer for 5-50+ parallel Claude Code agents.**
+
+Ship production systems in days, not months.
 
 ## The Player Piano Principle
 
@@ -19,170 +21,171 @@ The 10x isn't because AI types faster—it's because **parallel execution collap
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/claude-code-orchestration.git
-cd claude-code-orchestration
+git clone https://github.com/Devgapperk/-Claude-Code-Guide.git
+cd -Claude-Code-Guide
 
-# Spawn agents for all pending tasks
-./scripts/orchestrate.sh
+# Initialize Kleiber orchestra
+./scripts/kleiber-setup.sh
 
-# Open each worktree in a separate terminal
-cd ../worktrees/agent-1 && claude
-cd ../worktrees/agent-2 && claude
-# ... etc
+# Spawn agent fleet (architect, frontend, backend, validator, scribe)
+./scripts/spawn-agents.sh
 
-# When done, review and merge
-./scripts/merge-helper.sh
+# Assign tasks to agents
+./scripts/conductor.sh assign engineer-backend feat-001 "Build user authentication API"
+./scripts/conductor.sh assign engineer-frontend feat-002 "Create login form component"
+
+# Open each worktree in separate terminals
+cd ../worktrees/engineer-backend && claude
+cd ../worktrees/engineer-frontend && claude
+
+# Monitor orchestra status
+./scripts/conductor.sh status
 ```
 
-## How It Works
+## Model Selection Policy
 
-### 1. Define Your Blueprint (CLAUDE.md)
+**Use the cheapest model that can reliably do the job.**
 
-Encode your architecture standards, coding conventions, and domain knowledge:
+| Model | Cost | Use Case |
+|-------|------|----------|
+| **Opus** | $15/$75 per M | Architecture, security, compliance, complex refactors |
+| **Sonnet** | $3/$15 per M | Feature implementation, APIs, UI (default) |
+| **Haiku** | $0.25/$1.25 per M | Boilerplate, types, docs, logging |
 
-```markdown
-## Architecture Standards
-- TypeScript with strict mode
-- Repository pattern for data access
-- 80% test coverage minimum
+See `CLAUDE.md` for detailed routing rules.
 
-## Agent Protocol
-1. Read TASK.md
-2. Implement within scope
-3. Document in AGENT_NOTES.md
+## Agent Roles
+
+| Agent | Model | Responsibility |
+|-------|-------|----------------|
+| **Architect** | Opus | Reviews designs, approves architecture, never writes code |
+| **Engineer-Frontend** | Sonnet | React, Tailwind, UI components |
+| **Engineer-Backend** | Sonnet | Express, PostgreSQL, business logic |
+| **Validator** | Haiku | Runs tests, checks types, reports status |
+| **Scribe** | Haiku | Maintains docs, progress, changelog |
+
+## Idea Pipeline
+
+Transform messy founder brain dumps into actionable specs:
+
+```
+Voice Note → Idea Parser → Router → PRD Writer → Architect → Engineers
 ```
 
-### 2. List Parallel Tasks (tasks.md)
+### Idea Parser
+Takes raw input (voice transcripts, Slack dumps, whiteboard photos) and outputs structured `idea_snack.json`.
 
-```markdown
-- [ ] Database schema + migrations
-- [ ] Core API endpoints
-- [ ] Authentication middleware
-- [ ] Integration tests
-- [ ] Monitoring dashboards
-```
+### Router
+Analyzes parsed ideas and routes to:
+- **Battalion**: breathe / dynasty / orchestra / brandmind
+- **Model**: opus / sonnet / haiku
+- **Next Agent**: prd-writer / architect / prototype-builder
 
-### 3. Spawn the Fleet
-
-```bash
-./scripts/orchestrate.sh
-```
-
-Creates:
-- One git worktree per task
-- One feature branch per agent
-- CLAUDE.md + TASK.md + AGENT_NOTES.md in each
-
-### 4. Orchestrate
-
-- Tab-switch between Claude Code sessions
-- Don't wait—check on others while one thinks
-- Accept ~80%, discard ~20% (exploration cost)
-
-### 5. Merge Winners
-
-```bash
-./scripts/merge-helper.sh
-```
-
-Interactive review: view diffs, read notes, merge or discard.
+See `agents/idea-parser.md` and `agents/router.md` for full prompts.
 
 ## Repository Structure
 
 ```
-claude-code-orchestration/
-├── CLAUDE.md                 # Orchestration blueprint
-├── tasks.md                  # Parallel task backlog
+kleiber-orchestration/
+├── CLAUDE.md                    # Orchestration blueprint + model routing
+├── tasks.md                     # Parallel task backlog
+├── orchestration_log.md         # Token usage + cost tracking
+├── PROGRESS.md                  # Session progress (maintained by Scribe)
 ├── scripts/
-│   ├── orchestrate.sh        # Spawn agent worktrees
-│   └── merge-helper.sh       # Review and merge branches
+│   ├── kleiber-setup.sh         # Initialize orchestra
+│   ├── spawn-agents.sh          # Create agent worktrees
+│   ├── conductor.sh             # Task management CLI
+│   ├── orchestrate.sh           # Legacy: spawn from tasks.md
+│   └── merge-helper.sh          # Review and merge branches
+├── schemas/
+│   └── idea_snack_v1.json       # Idea parser output schema
+├── agents/
+│   ├── idea-parser.md           # Voice/text → structured JSON
+│   └── router.md                # Routing logic
+├── tasks/                       # Task assignments per agent
+├── progress/                    # Work-in-progress tracking
+├── complete/                    # Completed task records
+├── blocked/                     # Blocked task reports
 ├── docs/
-│   ├── QUICKSTART.md         # 5-minute setup
-│   ├── WORKFLOW.md           # Daily orchestration patterns
-│   └── ENTERPRISE.md         # Scaling to 50+ agents
+│   ├── QUICKSTART.md
+│   ├── WORKFLOW.md
+│   └── ENTERPRISE.md
 └── examples/
-    └── settlement-service/   # Real-world enterprise example
+    └── settlement-service/      # Enterprise example
+```
+
+## Conductor Commands
+
+```bash
+# Assign task to agent
+./scripts/conductor.sh assign <agent> <task-id> "<description>" [priority]
+
+# Show orchestra status
+./scripts/conductor.sh status
+
+# Watch status in real-time
+./scripts/conductor.sh watch
+
+# Review agent's completed work
+./scripts/conductor.sh review <agent>
+
+# Unblock a stuck task
+./scripts/conductor.sh unblock <agent> <task-id>
+
+# Log token usage
+./scripts/conductor.sh log <agent> <task-id> <model> <input-tokens> <output-tokens>
+
+# Show cost summary
+./scripts/conductor.sh costs
 ```
 
 ## Scaling Patterns
 
-| Scale | Agents | Use Case |
-|-------|--------|----------|
-| MVP | 5 | Proof of concept (6-8 hours) |
-| Production | 15 | Full-featured system (3-5 days) |
-| Enterprise | 50+ | Mission-critical platform (1-2 weeks) |
+| Scale | Agents | Timeline | Traditional |
+|-------|--------|----------|-------------|
+| MVP | 5 | 6-8 hours | 2-3 weeks |
+| Production | 15 | 3-5 days | 2-3 months |
+| Enterprise | 50+ | 1-2 weeks | 4-6 months |
 
-See [docs/ENTERPRISE.md](docs/ENTERPRISE.md) for multi-team orchestration, compliance patterns, and cost management.
+## Communication Protocol
 
-## The Mental Shift
-
-**Old job**: Write code line by line, debug, repeat.
-
-**New job**: Define architecture, decompose into parallel tasks, review outputs, merge winners.
-
-The skills that matter now:
-- **Prompt architecture**: How you structure CLAUDE.md
-- **Task decomposition**: How you split work across agents
-- **Quality validation**: How you review and merge
-- **Workflow orchestration**: How you manage 10+ parallel sessions
-
-## Example: Settlement Service
-
-The `examples/settlement-service/` demonstrates a real-world pattern:
-
-- Double-entry bookkeeping ledger
-- Idempotent transaction processing
-- Immutable audit trails
-- Enterprise database schema
-
-6 agents build this in 24-48 hours. Traditional timeline: 2-3 months.
-
-## Commands
-
-```bash
-# Spawn agents for pending tasks
-./scripts/orchestrate.sh
-
-# Check status of all agents
-./scripts/orchestrate.sh --status
-
-# Clean up all worktrees
-./scripts/orchestrate.sh --clean
-
-# Interactive merge review
-./scripts/merge-helper.sh
-
-# List agent branches
-./scripts/merge-helper.sh --list
-
-# Run tests on all branches
-./scripts/merge-helper.sh --test-all
+```
+Conductor → /tasks/{agent}/{task-id}.md        # Assignment
+Agent     → /progress/{agent}/{task-id}-started.md  # Acknowledgment
+Agent     → /complete/{agent}/{task-id}-done.md     # Completion
+Agent     → /blocked/{agent}/{task-id}-conflict.md  # Blocker
 ```
 
-## Why This Works
+## Cost Tracking
 
-1. **Isolation**: Each agent works in its own worktree—no conflicts during development
-2. **Context**: CLAUDE.md provides consistent architectural guidance
-3. **Parallel**: 10 agents = 10x throughput (wall-clock time)
-4. **Exploration**: Generate 15 implementations, pick the best 12
-5. **Cheap failure**: Discard 20% without guilt—net positive with 80%
+Every session logged in `orchestration_log.md`:
 
-## Enterprise Applications
+```markdown
+| Timestamp | Agent | Task | Model | Input | Output | Cost |
+|-----------|-------|------|-------|-------|--------|------|
+| 2025-01-09T14:30:00Z | engineer-backend | feat-001 | sonnet | 15000 | 8000 | $0.165 |
+```
 
-This methodology applies to:
-- **Financial systems**: Settlement, payment processing, ledgers
-- **Healthcare**: HIPAA-compliant data platforms
-- **E-commerce**: Multi-tenant SaaS, inventory systems
-- **Infrastructure**: Terraform modules, Kubernetes operators
-
-Traditional enterprise timeline: 4-6 months with 8-person team.
-Orchestrated timeline: 1-2 weeks with 50 agents.
+Daily budget guard: Alert if spend exceeds $50.
 
 ## Documentation
 
 - [Quick Start](docs/QUICKSTART.md) - 5 minutes to first agents
 - [Workflow Guide](docs/WORKFLOW.md) - Daily orchestration patterns
 - [Enterprise Guide](docs/ENTERPRISE.md) - Scaling to 50+ agents
+
+## The Mental Shift
+
+**Old job**: Write code line by line, debug, repeat.
+
+**New job**: Define architecture, decompose into parallel tasks, route to models, review outputs, merge winners.
+
+Skills that matter now:
+- **Blueprint design**: How you structure CLAUDE.md
+- **Task decomposition**: How you split work across agents
+- **Model routing**: When to use Opus vs Sonnet vs Haiku
+- **Quality validation**: How you review and merge
+- **Cost management**: Tracking spend, optimizing routing
 
 ---
 

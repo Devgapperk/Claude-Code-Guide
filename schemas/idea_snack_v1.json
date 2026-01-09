@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://digitaldali.io/schemas/idea_snack_v1.json",
+  "title": "Idea Snack",
+  "description": "Structured representation of a founder's raw idea, parsed from messy brain dumps",
+  "type": "object",
+  "required": ["meta", "signal", "problem", "solution"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the idea capture",
+      "required": ["idea_id", "timestamp", "source"],
+      "properties": {
+        "idea_id": {
+          "type": "string",
+          "description": "Unique identifier for this idea",
+          "pattern": "^idea-[a-z0-9]{8}$"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the idea was captured"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["voice_note", "text_dump", "whiteboard", "call_transcript", "slack", "email"],
+          "description": "How the idea was originally captured"
+        },
+        "author": {
+          "type": "string",
+          "description": "Who originated the idea"
+        },
+        "energy_level": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Inferred energy/enthusiasm level from tone"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Parser's confidence in extraction accuracy (0-1)"
+        }
+      }
+    },
+    "signal": {
+      "type": "object",
+      "description": "Quick classification for routing and prioritization",
+      "required": ["one_line_hook", "category"],
+      "properties": {
+        "one_line_hook": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Punchy summary in founder-native language"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["product", "feature", "experiment", "venture", "content_asset", "process_improvement"],
+          "description": "What type of thing this is"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Business domain (health, fintech, llmo, etc.)"
+        },
+        "urgency": {
+          "type": "string",
+          "enum": ["now", "this_week", "this_month", "later"],
+          "description": "How quickly this needs action"
+        },
+        "strategic_fit": {
+          "type": "string",
+          "enum": ["core", "adjacent", "wildcard"],
+          "description": "How well this aligns with current strategy"
+        }
+      }
+    },
+    "problem": {
+      "type": "object",
+      "description": "The problem being solved",
+      "properties": {
+        "user_segment": {
+          "type": "string",
+          "description": "Who has this problem"
+        },
+        "core_pain": {
+          "type": "string",
+          "description": "The fundamental frustration or need"
+        },
+        "current_workaround": {
+          "type": "string",
+          "description": "How people solve this today (even if badly)"
+        },
+        "job_to_be_done": {
+          "type": "string",
+          "description": "The JTBD framework articulation"
+        },
+        "frequency": {
+          "type": "string",
+          "enum": ["daily", "weekly", "monthly", "occasionally"],
+          "description": "How often users encounter this problem"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["annoyance", "significant", "critical", "existential"],
+          "description": "How painful the problem is"
+        }
+      }
+    },
+    "solution": {
+      "type": "object",
+      "description": "The proposed solution",
+      "required": ["concept"],
+      "properties": {
+        "concept": {
+          "type": "string",
+          "description": "High-level description of the solution"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["app", "agent_fleet", "service", "platform", "playbook", "integration", "content"],
+          "description": "What form the solution takes"
+        },
+        "key_capabilities": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Core features or capabilities"
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "How we know this worked"
+        },
+        "differentiator": {
+          "type": "string",
+          "description": "Why this is better than alternatives"
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Boundaries and limitations",
+      "properties": {
+        "timeline": {
+          "type": "string",
+          "enum": ["same_day", "1_week", "2_weeks", "1_month", "1_month+"],
+          "description": "Expected delivery timeframe"
+        },
+        "budget_band": {
+          "type": "string",
+          "enum": ["no_code", "lean", "moderate", "venture_scale"],
+          "description": "Resource availability"
+        },
+        "risk_tolerance": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "How much risk is acceptable"
+        },
+        "compliance": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Regulatory requirements (GDPR, HIPAA, PCI-DSS, etc.)"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "External dependencies or blockers"
+        }
+      }
+    },
+    "architecture_hint": {
+      "type": "object",
+      "description": "Technical direction suggestions",
+      "properties": {
+        "orchestration_pattern": {
+          "type": "string",
+          "enum": ["solo_agent", "small_ensemble", "full_fleet", "hybrid"],
+          "description": "Recommended agent deployment pattern"
+        },
+        "required_integrations": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "APIs or services that must be connected"
+        },
+        "preferred_stack": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Technology preferences"
+        },
+        "data_sensitivity": {
+          "type": "string",
+          "enum": ["public", "internal", "confidential", "restricted"],
+          "description": "Data classification level"
+        }
+      }
+    },
+    "impact_model": {
+      "type": "object",
+      "description": "How success will be measured",
+      "properties": {
+        "value_lens": {
+          "type": "string",
+          "enum": ["revenue", "cost_saving", "risk_reduction", "focus_restoration", "brand", "learning"],
+          "description": "Primary value driver"
+        },
+        "north_star_metric": {
+          "type": "string",
+          "description": "The one metric that matters most"
+        },
+        "leading_indicators": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Early signals of success"
+        },
+        "lagging_indicators": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Definitive success measures"
+        },
+        "estimated_impact": {
+          "type": "string",
+          "description": "Quantified expected outcome"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "description": "Current state and next steps",
+      "properties": {
+        "stage": {
+          "type": "string",
+          "enum": ["raw", "parsed", "validated", "specced", "in_build", "shipped", "measuring"],
+          "description": "Where in the pipeline this idea is"
+        },
+        "owner": {
+          "type": "string",
+          "description": "Who is responsible for this"
+        },
+        "next_step": {
+          "type": "string",
+          "description": "Immediate next action"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "What must happen before this can proceed"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Current obstacles"
+        }
+      }
+    },
+    "notes": {
+      "type": "object",
+      "description": "Unstructured context preservation",
+      "properties": {
+        "raw_dump": {
+          "type": "string",
+          "description": "Original unprocessed input"
+        },
+        "quotes": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Sharp founder quotes worth preserving verbatim"
+        },
+        "mood": {
+          "type": "string",
+          "enum": ["wired", "anxious", "excited", "frustrated", "drained", "focused", "exploratory"],
+          "description": "Emotional state when idea was captured"
+        },
+        "related_ideas": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Links to related idea_ids"
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Unresolved questions to explore"
+        }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "description": "Added by Router agent after parsing",
+      "properties": {
+        "assigned_battalion": {
+          "type": "string",
+          "enum": ["breathe", "dynasty", "orchestra", "brandmind"],
+          "description": "Which Digital Dali battalion owns this"
+        },
+        "model_recommendation": {
+          "type": "string",
+          "enum": ["opus", "sonnet", "haiku"],
+          "description": "Recommended Claude model for next step"
+        },
+        "next_agent": {
+          "type": "string",
+          "description": "Which agent should handle this next"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["p0", "p1", "p2", "p3"],
+          "description": "Execution priority"
+        }
+      }
+    }
+  }
+}
