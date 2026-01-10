@@ -1,6 +1,9 @@
 # KLEIBER ORCHESTRATION BLUEPRINT
 
-> Named after conductor Erich Kleiber—one orchestrator, many virtuosos, flawless coordination.
+> Named after conductor Carlos Kleiber—perfectionism, selective brilliance, legendary impact through restraint.
+>
+> "The greatest conductor of all time" conducted fewer performances than any peer.
+> Each one became legendary. This is the model for AI deployment.
 
 ## System Architecture
 
